@@ -1,8 +1,5 @@
-*.pyc
 *.npy
-*.iml
-*.xml
+*.pyc
 tmp/
-test/test_Dataset_AVEC2016_single.py
-test/tmp/
+.idea/
 Audioset/

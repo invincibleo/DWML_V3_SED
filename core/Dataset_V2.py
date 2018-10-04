@@ -74,10 +74,10 @@ class Dataset(object):
         self.feature_parameters = json.load(open(self.feature_parameter_dir + '/feature_parameters.json', 'r'))
 
         if self.dataset_list_dir == "":
-            self.dataset_list_dir = os.path.join(self.dataset_dir + '/tmp/dataset/', self.dataset_name)
+            self.dataset_list_dir = os.path.join('./tmp/dataset/', self.dataset_name)
 
         if self.feature_dir == "":
-            self.feature_dir = os.path.join(self.dataset_dir + '/tmp/feature/', self.dataset_name)
+            self.feature_dir = os.path.join('./tmp/feature/', self.dataset_name)
 
         self.training_total_features = []
         self.training_total_labels = []
