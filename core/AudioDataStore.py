@@ -60,6 +60,7 @@ class AudioDataStore(DataStore):
 
     def batch_raw_audio_generator(self, window_size=5, hop_size=1, batch_size=128):
         num_files = self.get_number_files()
+        j = 0
         while (1):
             idx_perm = np.random.permutation(num_files)
             for i in range(num_files):
@@ -73,16 +74,16 @@ class AudioDataStore(DataStore):
                 features_for_batch = np.zeros((batch_size, time_steps * feature_shape))
                 labels_for_batch = np.zeros((batch_size, label_size))
 
-                for j in range(batch_size):
-                    if window_pointer > audio_length - fs * window_size:
-                        break
-                    else:
-                        audio_matrix = np.reshape(audio[window_pointer:window_pointer + int(fs * window_size)], (time_steps * feature_shape))
-                        features_for_batch[j, :] = audio_matrix
-                        labels_for_batch[j, :] = np.reshape(labels, (-1, ))
-                        window_pointer = window_pointer + int(fs * hop_size)
+                while window_pointer <= audio_length - fs * window_size:
+                    audio_matrix = np.reshape(audio[window_pointer:window_pointer + int(fs * window_size)], (time_steps * feature_shape))
+                    features_for_batch[j, :, :] = audio_matrix
 
-                features_for_batch = np.expand_dims(features_for_batch, 4)
-                # print("Features shape:" + str(np.shape(features_for_batch)))
-                # print("Labels shape:" + str(np.shape(labels_for_batch)))
-                yield (features_for_batch, labels_for_batch)
+                    labels_for_batch[j, :] = np.reshape(labels, (-1, ))
+                    window_pointer = window_pointer + int(fs * hop_size)
+                    j = j + 1
+                    if j >= batch_size:
+                        j = 0
+                        features_for_batch = np.expand_dims(features_for_batch, 3)
+                        yield (features_for_batch, labels_for_batch)
+                        features_for_batch = np.zeros((batch_size, time_steps * feature_shape))
+                        labels_for_batch = np.zeros((batch_size, label_size))

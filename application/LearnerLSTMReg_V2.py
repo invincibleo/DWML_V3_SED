@@ -84,12 +84,13 @@ class LearnerLSTMReg(Learner):
                                                                                                   batch_size=self.FLAGS.train_batch_size)
             hist = model.fit_generator(
                             generator=train_generator,
-                            steps_per_epoch=int(self.dataset.num_training_data / self.FLAGS.train_batch_size),
+                            steps_per_epoch=int(self.dataset.num_training_data * 5 / self.FLAGS.train_batch_size),
                             epochs=self.FLAGS.epochs,
                             verbose=1,
                             callbacks=[tensorboard],
                             validation_data=validation_generator,
-                            validation_steps=int(self.dataset.num_validation_data / self.FLAGS.train_batch_size),
+                            validation_steps=int(self.dataset.num_validation_data * 5 / self.FLAGS.train_batch_size),
+                            shuffle=True,
                             )
 
             # save the model and training history

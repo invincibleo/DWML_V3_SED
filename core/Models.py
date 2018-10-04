@@ -260,12 +260,12 @@ def SoundNet(input_shape=(5*22000, 1)):
                           'kernel_size': 4, 'conv_strides': 2,
                           'pool_size': 1, 'pool_strides': 4, 'trainable': False},
 
-                         # {'name': 'conv6', 'num_filters': 512, 'padding': 2,
-                         #  'kernel_size': 4, 'conv_strides': 2, 'trainable': False},
-                         #
-                         # {'name': 'conv7', 'num_filters': 1024, 'padding': 2,
-                         #  'kernel_size': 4, 'conv_strides': 2, 'trainable': False},
-                         #
+                         {'name': 'conv6', 'num_filters': 512, 'padding': 2,
+                          'kernel_size': 4, 'conv_strides': 2, 'trainable': False},
+
+                         {'name': 'conv7', 'num_filters': 1024, 'padding': 2,
+                          'kernel_size': 4, 'conv_strides': 2, 'trainable': False},
+
                          # {'name': 'conv8_2', 'num_filters': 401, 'padding': 0,
                          #  'kernel_size': 8, 'conv_strides': 2, 'trainable': False},
                          ]
