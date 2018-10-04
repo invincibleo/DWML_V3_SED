@@ -138,9 +138,9 @@ class Dataset(object):
 
     def count_sets_data(self):
         # count data point
-        self.num_training_data = len(self.data_list['training'])
-        self.num_validation_data = len(self.data_list['validation'])
-        self.num_testing_data = len(self.data_list['testing'])
+        self.num_training_data = len(data_list['training'].files)
+        self.num_validation_data = len(data_list['validation'].files)
+        self.num_testing_data = len(data_list['testing'].files)
 
     def dataset_normalization(self):
         # normalization, val and test set using training mean and training std

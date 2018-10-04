@@ -58,6 +58,7 @@ class OntologyProcessing(object):
             except IndexError:
                 continue
         second_level_class[u'/m/04rlf'] = aso['/m/04rlf'] #special case, many data has a class - Music
+        second_level_class[u'/m/0jbk'] = aso['/m/0jbk']  # special case, many data has a class - Animal
         return second_level_class.keys(), aso
 
     @staticmethod

@@ -232,7 +232,7 @@ def LSTM_MIMO(num_t_x, num_input_dims, num_states=64):
     model = Model(inputs=[X, a0, c0], outputs=outputs)    # [X, a0, c0]
     return model
 
-def SoundNet():
+def SoundNet(input_shape=(5*22000, 1)):
     """
     Builds up the SoundNet model and loads the weights from a given model file (8-layer model is kept at models/sound8.npy).
     pool size divided by 2
@@ -240,7 +240,7 @@ def SoundNet():
     """
     model_weights = np.load('sound8.npy', encoding='latin1').item()
     model = Sequential()
-    model.add(InputLayer(input_shape=(10*44100, 1)))
+    model.add(InputLayer(input_shape))
 
     filter_parameters = [{'name': 'conv1', 'num_filters': 16, 'padding': 32,
                           'kernel_size': 64, 'conv_strides': 2,

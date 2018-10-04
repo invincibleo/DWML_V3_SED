@@ -30,23 +30,20 @@ class LearnerLSTMReg(Learner):
         continue_training = False
         if not os.path.exists(model_json_file_addr) or continue_training:
             self.copy_configuration_code()  # copy the configuration code so that known in which condition the model is trained
-            input_shape = (10*44100, 1)
+            input_shape = (5*22000, 1)
             # input_shape = self.input_shape
             # self.dataset.training_total_features = np.reshape(self.dataset.training_total_features, (-1,) + input_shape)
             # self.dataset.validation_total_features = np.reshape(self.dataset.validation_total_features, (-1,) + input_shape)
 
-            model = SoundNet()
+            model = SoundNet(input_shape)
             model.add(Flatten())
+
             model.add(Dense(1024))
             model.add(BatchNormalization())
             model.add(Activation('relu'))
             model.add(Dropout(self.FLAGS.drop_out_rate))
-            model.add(Dense(1024))
-            model.add(BatchNormalization())
-            model.add(Activation('relu'))
-            model.add(Dropout(self.FLAGS.drop_out_rate))
+
             model.add(Dense(self.dataset.num_classes))
-            model.add(BatchNormalization())
             model.add(Activation('sigmoid'))
 
             if continue_training:
@@ -78,17 +75,20 @@ class LearnerLSTMReg(Learner):
                                                                      epsilon=0.0005)
 
             model.summary()
+
+            train_generator = self.dataset.data_list['training'].batch_raw_audio_generator(window_size=5,
+                                                                                           hop_size=1,
+                                                                                           batch_size=self.FLAGS.train_batch_size)
+            validation_generator = self.dataset.data_list['validation'].batch_raw_audio_generator(window_size=5,
+                                                                                                  hop_size=1,
+                                                                                                  batch_size=self.FLAGS.train_batch_size)
             hist = model.fit_generator(
-                            generator=self.dataset.generate_batch_data(category='training',
-                                                                       batch_size=self.FLAGS.train_batch_size,
-                                                                       input_shape=input_shape),
+                            generator=train_generator,
                             steps_per_epoch=int(self.dataset.num_training_data / self.FLAGS.train_batch_size),
                             epochs=self.FLAGS.epochs,
                             verbose=1,
                             callbacks=[tensorboard],
-                            validation_data=self.dataset.generate_batch_data(category='validation',
-                                                                             batch_size=self.FLAGS.validation_batch_size,
-                                                                             input_shape=input_shape),
+                            validation_data=validation_generator,
                             validation_steps=int(self.dataset.num_validation_data / self.FLAGS.train_batch_size),
                             )
 

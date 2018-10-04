@@ -26,7 +26,7 @@ class DataStore(object):
             self.files = files
 
         # sort the file list
-        self.files.sort(key=lambda x: int(os.path.basename(x).split('.')[0].split('_')[-1]))
+        self.files.sort()
 
         self.read_pointer = 0
 
